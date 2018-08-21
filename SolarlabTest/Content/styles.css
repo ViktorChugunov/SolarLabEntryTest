@@ -1,0 +1,456 @@
+﻿* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+/* Блок хеадер */
+header {
+    width: 100%;
+    height: 60px;
+    position: fixed;
+    top: 0;
+    background-color: #db4c3f;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-content {
+    width: 1024px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-left {
+    margin: 5px 0 0 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-left a {
+    font-size: 32px;
+    text-decoration: none;
+}
+
+.header-center ul {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+}
+
+.header-center ul li{
+    padding: 0 0 0 48px;
+}
+
+.header-center ul li a{
+    color: #FFF;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.header-right {
+    margin-right: 24px;
+}
+
+#show-add-task-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 36px;
+    width: 160px;
+    font-size: 18px;
+    border-radius: 5px;
+    background-color: rgb( 43, 153, 91 );
+    border: 1px solid rgb( 33, 126, 74 );
+    color: #fff;
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: background-color 0.1s linear;
+    -moz-transition: background-color 0.1s linear;
+    -o-transition: background-color 0.1s linear;
+    transition: background-color 0.1s linear;
+}
+
+#show-add-task-form:hover {
+    cursor: pointer;
+}
+
+/* Контекст */
+.container {
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+    background-color: #f1f1f1;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    border-right: 1px solid #e1e1e1;
+    min-height: calc(100vh - 120px);
+    width: 1024px;
+}
+
+/* Блок левого меню */
+.left-menu {
+    width: 30%;
+    min-width: 270px;
+    border-right: 1px solid #e1e1e1;
+    padding: 0;
+}
+
+.filters-block {
+    padding: 0;
+    position: fixed;
+}
+
+.filters-block-header {
+    font-size: 20px;
+    font-weight: 600;
+    padding: 24px 0 24px 24px;
+}
+
+.left-menu-list {
+    list-style-type: none;
+}
+
+.left-menu-list-item {
+    padding: 0 24px 0 0;
+}
+
+.left-menu-list-item:hover {
+    background-color: #d1d1d1;
+}
+
+.left-menu-list a {
+    color: #000;
+    font-size: 16px;
+    text-decoration: none;
+    width: 100%;
+    height: 38px;
+    line-height: 38px;
+    display: block;
+}
+
+.left-menu-list-item-icon {
+    padding: 0 8px 0 24px;
+}
+
+.task-number {
+    font-weight: 600;
+    color: #707070;
+    padding-left: 8px;
+}
+
+
+/* Блок задач */
+.tasks-block {
+    width: 70%;
+    min-width: 470px;
+    padding: 0 24px 24px 24px;
+    background-color: #FFF;
+}
+
+.h1-header {
+    padding: 15px 0 0 0;
+    margin: 0;
+}
+
+.no-tasks {
+    margin: 28px 0 0 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #db4c3f;
+}
+
+.task-deadline-date {
+    margin: 28px 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #de5a5a;
+}
+
+.task-block-list {
+    list-style-type: none;
+}
+
+.task-block-list-item {
+    padding: 0 0 0 8px;
+    color: #000;
+    font-size: 16px;
+    width: 100%;
+    height: 38px;
+    line-height: 38px;
+    display: block;
+}
+
+.task-done-icon {
+    padding: 0 6px 0 0;
+    width: 24px;
+    color: #00ff21;
+}
+
+.task-not-done-icon {
+    padding: 0 8px 0 2px;
+    width: 24px;
+}
+
+.delete-task-icon {
+    float: right;
+    padding-left: 8px;
+}
+
+.delete-task-icon a {
+    text-decoration: none;
+}
+
+.set-task-done-icon {
+    float: right;
+    padding-left: 8px;
+}
+
+.set-task-done-icon a, .set-task-done-icon a:hover {
+    text-decoration: none;
+}
+
+.set-task-not-done-icon {
+    float: right;
+    padding-left: 8px;
+}
+
+.set-task-not-done-icon a, .set-task-not-done-icon a:hover {
+    text-decoration: none;
+}
+
+.set-low-task-priority-icon a, .set-high-task-priority-icon a {
+    text-decoration: none;
+    float: right;
+    padding-left: 8px;
+}
+
+.set-low-task-priority-icon a:hover, .set-high-task-priority-icon a:hover {
+    text-decoration: none;
+}
+
+.remark-task-icon {
+    float: right;
+    padding-left: 8px;
+}
+
+.remark-task-icon a {
+    text-decoration: none;
+}
+
+
+/* Блок добавления задачи */
+.add-task-block {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    background-color: rgba(15, 15, 15, .8);
+}
+
+.add-task-block-visible {
+    visibility: visible;
+}
+
+.add-task-block-hidden {
+    visibility: hidden;
+}
+
+.add-task-form {
+    position: fixed;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    min-width: 500px;
+    padding: 12px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    background-color: #FFF;
+}
+
+#add-task-form-close-icon {
+    float: right;
+    font-size: 18px;
+}
+
+#add-task-form-close-icon:hover {
+    cursor: pointer;
+}
+
+.add-task-form-header {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+    padding: 12px 0 24px 0;
+}
+
+label {
+    font-weight: 600;
+    margin-left: 24px;
+    font-size: 16px;
+}
+
+.task-name-input {
+    margin: 12px 0 12px 70px;
+    padding: 5px;
+    height: 35px;
+    border-radius: 5px;
+    border: 2px solid #808080;
+    
+    max-width: 550px;
+}
+
+.execution-date-input {
+    margin: 12px 0 12px 27px;
+    padding: 5px;
+    height: 35px;
+    border-radius: 5px;
+    border: 2px solid #808080;
+}
+
+.execution-time-input {
+    margin: 12px 0 12px 53px;
+    padding: 5px;
+    height: 35px;
+    border-radius: 5px;
+    border: 2px solid #808080;
+}
+
+.hight-priority-input {
+    margin: 24px 0 24px 30px;
+    padding: 5px;
+    transform: scale(1.5);
+    border-radius: 5px;
+    border: 2px solid #808080;
+}
+
+.add-task-button {
+    margin: 24px auto 12px auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 48px;
+    width: 400px;
+    font-size: 18px;
+    border-radius: 5px;
+    background-color: rgb( 43, 153, 91 );
+    border: 1px solid rgb( 33, 126, 74 );
+    color: #fff;
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: background-color 0.1s linear;
+    -moz-transition: background-color 0.1s linear;
+    -o-transition: background-color 0.1s linear;
+    transition: background-color 0.1s linear;
+}
+
+.add-task-button:hover {
+    cursor: pointer;
+}
+
+/* Блок изменения задачи */
+.change-task-block {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    background-color: rgba(15, 15, 15, .8);
+}
+
+.change-task-block-visible {
+    visibility: visible;
+}
+
+.change-task-block-hidden {
+    visibility: hidden;
+}
+
+.change-task-form-header {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+    padding: 12px 0 24px 0;
+}
+
+.change-task-form {
+    position: fixed;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    min-width: 500px;
+    padding: 12px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    background-color: #FFF;
+}
+
+.change-task-button {
+    margin: 24px auto 12px auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 48px;
+    width: 400px;
+    font-size: 18px;
+    border-radius: 5px;
+    background-color: rgb( 43, 153, 91 );
+    border: 1px solid rgb( 33, 126, 74 );
+    color: #fff;
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: background-color 0.1s linear;
+    -moz-transition: background-color 0.1s linear;
+    -o-transition: background-color 0.1s linear;
+    transition: background-color 0.1s linear;
+}
+
+.change-task-button:hover {
+    cursor: pointer;
+}
+
+#change-task-form-close-icon {
+    float: right;
+    font-size: 18px;
+}
+
+#change-task-form-close-icon:hover {
+    cursor: pointer;
+}
+
+
+/* Футтер */
+footer {
+    width: 100%;
+    height: 60px;
+    background-color: #db4c3f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFF;
+}

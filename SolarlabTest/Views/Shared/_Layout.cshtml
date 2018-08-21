@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Планировщик - @ViewBag.Title</title>
+    <link href="/Content/styles.css" rel="stylesheet" type="text/css" />
+    <script src="/Scripts/jquery-3.3.1.js"></script>
+    <script src="/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="/Scripts/main.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="header-left">
+                <a href="/"><img src="~/Content/img/logo.png" width="50"></a>
+            </div>
+            <div class="header-center">
+            </div>
+            <div class="header-right">
+                <div id="show-add-task-form">
+                    Добавить задачу
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="content">
+            <div class="left-menu">
+                <div class="filters-block">
+                    <p class="filters-block-header">Фильтрация задач</p>
+                    <ul class="left-menu-list">
+                        <li class="left-menu-list-item">
+                            <a href="/Home/Index">
+                                <span class="left-menu-list-item-icon">&#128221;</span>
+                                <span>Входящие</span>
+                                <span class="task-number">(@ViewBag.DoneInboxTasksNumber/@ViewBag.InboxTasksNumber)</span>
+                            </a>
+                        </li>
+                        <li class="left-menu-list-item">
+                            <a href="/Home/Index/?FilterType=Today">
+                                <span class="left-menu-list-item-icon">&#128198;</span>
+                                <span>Сегодня</span>
+                                <span class="task-number">(@ViewBag.DoneTodayTasksNumber/@ViewBag.TodayTasksNumber)</span>
+                            </a>
+                        </li>
+                        <li class="left-menu-list-item">
+                            <a href="/Home/Index/?FilterType=Week">
+                                <span class="left-menu-list-item-icon">&#128197;</span>
+                                <span>Следующие 7 дней</span>
+                                <span class="task-number">(@ViewBag.DoneWeekTasksNumber/@ViewBag.WeekTasksNumber)</span>
+                            </a>
+                        </li>
+                        <li class="left-menu-list-item">
+                            <a href="/Home/Index/?FilterType=Archive">
+                                <span class="left-menu-list-item-icon">&#128193;</span>
+                                <span>Архив</span>
+                                <span class="task-number">(@ViewBag.DoneArchiveTasksNumber/@ViewBag.ArchiveTasksNumber)</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tasks-block">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; @DateTime.Now.Year – "Планировщик" для SolarLab</p>
+    </footer>
+</body>
+</html>

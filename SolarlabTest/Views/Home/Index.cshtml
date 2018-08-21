@@ -1,0 +1,113 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    ViewBag.Title = @ViewBag.PageName;
+}
+
+
+<h1 class="h1-header">@ViewBag.PageName</h1>
+@if (@ViewBag.QueryTasksNumber == 0)
+{
+    <p class="no-tasks">У Вас нет задач!</p>
+}
+else
+{
+    foreach (var group in ViewBag.groups)
+    {
+        foreach (var task in group)
+        {
+            <p class="task-deadline-date">@task.DeadlineDate.ToLongDateString()</p>;
+            break;
+        }
+        <ul class="task-block-list">
+            @foreach (var task in group)
+            {
+                <li class="task-block-list-item">
+                    @if (@task.TaskDone)
+                    {
+                        <span class="task-done-icon">&#10004;</span>
+                    }
+                    else
+                    {
+                        if (@task.HighTaskPriority)
+                        {
+                            <span class="task-not-done-icon">&#10071;</span>
+                        }
+                        else
+                        {
+                            <span class="task-not-done-icon">&#10069;</span>
+                        }
+                    }
+                    @task.TaskName (@task.DeadlineTime)
+                    <span class="delete-task-icon"><a href="/Home/DeleteTask/?Id=@task.Id&FilterType=@ViewBag.FilterType" title="Удалить задачу">&#10060;</a></span>
+                    <span class="remark-task-icon"><a href="#" taskId="@task.Id" class="change-task-link" title="Изменить задачу">&#9997;</a></span>
+                    @if (@task.TaskDone)
+                    {
+                        <span class="set-task-done-icon"><a href="/Home/ChangeTaskState/?Id=@task.Id&FilterType=@ViewBag.FilterType" title="Убрать метку о выполнении задачи">&#128078;</a></span>
+                    }
+                    else
+                    {
+                        <span class="set-task-not-done-icon"><a href="/Home/ChangeTaskState/?Id=@task.Id&FilterType=@ViewBag.FilterType" title="Поставить метку о выполнении задачи">&#128077;</a></span>
+                    }
+                </li>
+            }
+        </ul>
+    }
+}
+
+<div class="add-task-block add-task-block-hidden">
+    <form method="GET" action="/Home/AddTask" class="add-task-form">
+        <p id="add-task-form-close-icon">&#10060;</p>
+        <p class="add-task-form-header">Заполните поля формы</p>
+        <hr>
+        <label for="TaskName">Имя задачи:</label>
+        <input type="text" name="TaskName" size="35" required class="task-name-input">
+        <br>
+        <hr>
+        <label for="ExecutionDate">Дата выполнения:</label>
+        <input type="date" name="DeadlineDate" required class="execution-date-input">
+        <br>
+        <hr>
+        <label for="ExecutionTime">Завершить до:</label>
+        <input type="time" name="DeadlineTime" class="execution-time-input" value="00:00"> (чч:мм)
+        <br>
+        <hr>
+        <label for="HighPriority">Приоритет задачи:</label>
+        <input type="radio" name="HighPriority" value="False" class="hight-priority-input" checked> Обычный
+        <input type="radio" name="HighPriority" value="True" class="hight-priority-input"> Высокий
+        <br>
+        <hr>
+        <input type="hidden" name="FilterType" value="@ViewBag.FilterType">
+        <input type="submit" value="Добавить задачу" class="add-task-button" />
+    </form>
+</div>
+
+<div class="change-task-block change-task-block-hidden">
+    <form method="GET" action="/Home/ChangeTask" class="change-task-form">
+        <p id="change-task-form-close-icon">&#10060;</p>
+        <p class="change-task-form-header">Заполните поля формы</p>
+        <hr>
+        <label for="TaskName">Имя задачи:</label>
+        <input type="text" name="TaskName" size="35" required class="task-name-input">
+        <br>
+        <hr>
+        <label for="ExecutionDate">Дата выполнения:</label>
+        <input type="date" name="DeadlineDate" required class="execution-date-input">
+        <br>
+        <hr>
+        <label for="ExecutionTime">Завершить до:</label>
+        <input type="time" name="DeadlineTime" class="execution-time-input" value="00:00"> (чч:мм)
+        <br>
+        <hr>
+        <label for="HighPriority">Приоритет задачи:</label>
+        <input type="radio" name="HighPriority" value="False" class="hight-priority-input" checked> Обычный
+        <input type="radio" name="HighPriority" value="True" class="hight-priority-input"> Высокий
+        <br>
+        <hr>
+        <input type="hidden" name="TaskId" class="task-id-input">
+        <input type="hidden" name="FilterType" value="@ViewBag.FilterType">
+        <input type="submit" value="Изменить задачу" class="change-task-button" />
+    </form>
+</div>
