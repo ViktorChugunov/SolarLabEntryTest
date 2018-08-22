@@ -1,28 +1,21 @@
-﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
+﻿@model SolarlabTest.Models.TasksViewModel
 @{
-    ViewBag.Title = @ViewBag.PageName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = Model.PageName;
 }
 
-
-<h1 class="h1-header">@ViewBag.PageName</h1>
-@if (@ViewBag.QueryTasksNumber == 0)
+<h1 class="h1-header">@Model.PageName</h1>
+@if (@Model.QueryTasksNumber == 0)
 {
     <p class="no-tasks">У Вас нет задач!</p>
 }
 else
 {
-    foreach (var group in ViewBag.groups)
+    foreach (var group in @Model.Groups)
     {
-        foreach (var task in group)
-        {
-            <p class="task-deadline-date">@task.DeadlineDate.ToLongDateString()</p>;
-            break;
-        }
+        <p class="task-deadline-date">@group.First().DeadlineDate.ToLongDateString()</p>;
         <ul class="task-block-list">
-            @foreach (var task in group)
+            @foreach (var task in group.OrderBy(p => p.DeadlineTime).ToList())
             {
                 <li class="task-block-list-item">
                     @if (@task.TaskDone)
@@ -58,7 +51,7 @@ else
 }
 
 <div class="add-task-block add-task-block-hidden">
-    <form method="GET" action="/Home/AddTask" class="add-task-form">
+    <form method="POST" action="/Home/AddTask" class="add-task-form">
         <p id="add-task-form-close-icon">&#10060;</p>
         <p class="add-task-form-header">Заполните поля формы</p>
         <hr>
@@ -85,7 +78,7 @@ else
 </div>
 
 <div class="change-task-block change-task-block-hidden">
-    <form method="GET" action="/Home/ChangeTask" class="change-task-form">
+    <form method="POST" action="/Home/ChangeTask" class="change-task-form">
         <p id="change-task-form-close-icon">&#10060;</p>
         <p class="change-task-form-header">Заполните поля формы</p>
         <hr>

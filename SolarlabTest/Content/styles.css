@@ -3,11 +3,6 @@
     margin: 0;
 }
 
-body {
-    padding: 0;
-    margin: 0;
-}
-
 /* Блок хеадер */
 header {
     width: 100%;
@@ -40,22 +35,6 @@ header {
 .header-left a {
     font-size: 32px;
     text-decoration: none;
-}
-
-.header-center ul {
-    display: flex;
-    flex-direction: row;
-    list-style-type: none;
-}
-
-.header-center ul li{
-    padding: 0 0 0 48px;
-}
-
-.header-center ul li a{
-    color: #FFF;
-    font-size: 16px;
-    font-weight: 600;
 }
 
 .header-right {
@@ -155,7 +134,6 @@ header {
     padding-left: 8px;
 }
 
-
 /* Блок задач */
 .tasks-block {
     width: 70%;
@@ -254,7 +232,6 @@ header {
     text-decoration: none;
 }
 
-
 /* Блок добавления задачи */
 .add-task-block {
     width: 100%;
@@ -314,7 +291,6 @@ label {
     height: 35px;
     border-radius: 5px;
     border: 2px solid #808080;
-    
     max-width: 550px;
 }
 
@@ -442,7 +418,6 @@ label {
 #change-task-form-close-icon:hover {
     cursor: pointer;
 }
-
 
 /* Футтер */
 footer {

@@ -121,6 +121,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\TasksViewModel.cs" />
     <Compile Include="Models\UserTask.cs" />
     <Compile Include="Models\UserTaskContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

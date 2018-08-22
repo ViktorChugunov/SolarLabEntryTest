@@ -9,150 +9,165 @@ namespace SolarlabTest.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index(string FilterType)
+        public ActionResult Index(string filterType)
         {
-            UserTaskContext db = new UserTaskContext();
-            var CurrentDate = DateTime.Now.Date;
-            var EndDate = CurrentDate.AddDays(7);
-            IQueryable<UserTask> Groups;
-            int QueryTasksNumber;
-            if (FilterType == "Today")
-            {
-                Groups = db.UserTasks.Where(c => c.DeadlineDate == CurrentDate);
-                QueryTasksNumber = db.UserTasks.Where(c => c.DeadlineDate == CurrentDate).Count();
-                ViewBag.PageName = "Задачи на сегодня";
+            using (UserTaskContext db = new UserTaskContext()) {
+                var viewModel = GetTasksViewModelData(db, filterType);
+                ViewBag.filterType = filterType;
+                return View(viewModel);
             }
-            else if (FilterType == "Week")
+        }
+
+        public TasksViewModel GetTasksViewModelData(UserTaskContext db, string filterType)
+        {
+            // Получение значений количества выполненных задач и общего кол-ва задач в различных категориях 
+            DateTime currentDate = DateTime.Now.Date;
+            DateTime endDate = currentDate.AddDays(7);
+            int inboxTasksNumber = db.UserTasks.Where(c => c.DeadlineDate >= currentDate).Count();
+            int doneInboxTasksNumber = db.UserTasks.Where(c => c.TaskDone == true && c.DeadlineDate >= currentDate).Count();
+            int todayTasksNumber = db.UserTasks.Where(c => c.DeadlineDate == currentDate).Count();
+            int doneTodayTasksNumber = db.UserTasks.Where(c => c.DeadlineDate == currentDate && c.TaskDone == true).Count();
+            int weekTasksNumber = db.UserTasks.Where(c => c.DeadlineDate >= currentDate && c.DeadlineDate <= endDate).Count();
+            int doneWeekTasksNumber = db.UserTasks.Where(c => c.DeadlineDate >= currentDate && c.DeadlineDate <= endDate && c.TaskDone == true).Count();
+            int archiveTasksNumber = db.UserTasks.Where(c => c.DeadlineDate < currentDate).Count();
+            int doneArchiveTasksNumber = db.UserTasks.Where(c => c.DeadlineDate < currentDate && c.TaskDone == true).Count();
+            // Получение значений "Имя страницы", "Количества задач", "Групп задач"
+            string pageName;
+            int queryTasksNumber;
+            IEnumerable<IGrouping<DateTime, UserTask>> groups;
+            if (filterType == "Today")
             {
-                Groups = db.UserTasks.Where(c => c.DeadlineDate >= CurrentDate && c.DeadlineDate <= EndDate);
-                QueryTasksNumber = db.UserTasks.Where(c => c.DeadlineDate >= CurrentDate && c.DeadlineDate <= EndDate).Count();
-                ViewBag.PageName = "Задачи на cледующие 7 дней";
+                groups = db.UserTasks.Where(c => c.DeadlineDate == currentDate).GroupBy(p => p.DeadlineDate).ToList();
+                queryTasksNumber = db.UserTasks.Where(c => c.DeadlineDate == currentDate).Count();
+                pageName = "Задачи на сегодня";
             }
-            else if (FilterType == "Archive")
+            else if (filterType == "Week")
             {
-                Groups = db.UserTasks.Where(c => c.DeadlineDate < CurrentDate);
-                QueryTasksNumber = db.UserTasks.Where(c => c.DeadlineDate < CurrentDate).Count();
-                ViewBag.PageName = "Архив задач";
+                groups = db.UserTasks.Where(c => c.DeadlineDate >= currentDate && c.DeadlineDate <= endDate).GroupBy(p => p.DeadlineDate).ToList();
+                queryTasksNumber = db.UserTasks.Where(c => c.DeadlineDate >= currentDate && c.DeadlineDate <= endDate).Count();
+                pageName = "Задачи на cледующие 7 дней";
+            }
+            else if (filterType == "Archive")
+            {
+                groups = db.UserTasks.Where(c => c.DeadlineDate < currentDate).GroupBy(p => p.DeadlineDate).ToList();
+                queryTasksNumber = db.UserTasks.Where(c => c.DeadlineDate < currentDate).Count();
+                pageName = "Архив задач";
             }
             else
             {
-                Groups = db.UserTasks.Where(c => c.DeadlineDate >= CurrentDate);
-                QueryTasksNumber = db.UserTasks.Where(c => c.DeadlineDate >= CurrentDate).Count();
-                ViewBag.PageName = "Входящие задачи";
+                groups = db.UserTasks.Where(c => c.DeadlineDate >= currentDate).GroupBy(p => p.DeadlineDate).ToList();
+                queryTasksNumber = db.UserTasks.Where(c => c.DeadlineDate >= currentDate).Count();
+                pageName = "Входящие задачи";
             }
-            int InboxTasksNumber = db.UserTasks.Where(c => c.DeadlineDate >= CurrentDate).Count();
-            int DoneInboxTasksNumber = db.UserTasks.Where(c => c.TaskDone == true && c.DeadlineDate >= CurrentDate).Count();
-            IEnumerable<UserTask> TodayTasks = db.UserTasks.Where(c => c.DeadlineDate == CurrentDate);
-            IEnumerable<UserTask> DoneTodayTasks = db.UserTasks.Where(c => c.DeadlineDate == CurrentDate && c.TaskDone == true);
-            IEnumerable<UserTask> WeekTasks = db.UserTasks.Where(c => c.DeadlineDate >= CurrentDate && c.DeadlineDate <= EndDate);
-            IEnumerable<UserTask> DoneWeekTasks = db.UserTasks.Where(c => c.DeadlineDate >= CurrentDate && c.DeadlineDate <= EndDate && c.TaskDone == true);
-            IEnumerable<UserTask> ArchiveTasks = db.UserTasks.Where(c => c.DeadlineDate < CurrentDate);
-            IEnumerable<UserTask> DoneArchiveTasks = db.UserTasks.Where(c => c.DeadlineDate < CurrentDate && c.TaskDone == true);
-            ViewBag.DoneInboxTasksNumber = DoneInboxTasksNumber;
-            ViewBag.InboxTasksNumber = InboxTasksNumber;
-            ViewBag.DoneTodayTasksNumber = DoneTodayTasks.Count();
-            ViewBag.TodayTasksNumber = TodayTasks.Count();
-            ViewBag.DoneWeekTasksNumber = DoneWeekTasks.Count();
-            ViewBag.WeekTasksNumber = WeekTasks.Count();
-            ViewBag.DoneArchiveTasksNumber = DoneArchiveTasks.Count();
-            ViewBag.ArchiveTasksNumber = ArchiveTasks.Count();
-            ViewBag.QueryTasksNumber = QueryTasksNumber;
-            ViewBag.Groups = Groups.GroupBy(p => p.DeadlineDate);
-            ViewBag.FilterType = FilterType;
-            return View();
+            // Занесение вычеслинных значений в объект viewModel
+            var viewModel = new TasksViewModel()
+            {
+                PageName = pageName,
+                InboxTasksNumber = inboxTasksNumber,
+                DoneInboxTasksNumber = doneInboxTasksNumber,
+                TodayTasksNumber = todayTasksNumber,
+                DoneTodayTasksNumber = doneTodayTasksNumber,
+                WeekTasksNumber = weekTasksNumber,
+                DoneWeekTasksNumber = doneWeekTasksNumber,
+                ArchiveTasksNumber = archiveTasksNumber,
+                DoneArchiveTasksNumber = doneArchiveTasksNumber,
+                QueryTasksNumber = queryTasksNumber,
+                Groups = groups
+            };
+            return viewModel;
         }
 
         [HttpGet]
-        public ActionResult DeleteTask(int Id, string FilterType)
+        public ActionResult DeleteTask(int id, string filterType)
         {
             using (UserTaskContext db = new UserTaskContext())
             {
-                UserTask task = db.UserTasks.Where(c => c.Id == Id).FirstOrDefault();
+                UserTask task = db.UserTasks.Where(c => c.Id == id).FirstOrDefault();
                 db.UserTasks.Attach(task);
                 db.UserTasks.Remove(task);
                 db.SaveChanges();
             }
-            if (FilterType == "")
+            if (filterType == "")
             {
                 return Redirect("/Home/Index");
             }
             else
             {
-                return Redirect("/Home/Index/?FilterType=" + FilterType);
+                return Redirect("/Home/Index/?FilterType=" + filterType);
             }
         }
 
         [HttpGet]
-        public ActionResult ChangeTaskState(int Id, string FilterType)
+        public ActionResult ChangeTaskState(int id, string filterType)
         {
             using (UserTaskContext db = new UserTaskContext())
             {
-                UserTask task = db.UserTasks.Where(c => c.Id == Id).FirstOrDefault();
+                UserTask task = db.UserTasks.Where(c => c.Id == id).FirstOrDefault();
                 task.TaskDone = !task.TaskDone;
                 db.SaveChanges();
             }
-            if (FilterType == "")
+            if (filterType == "")
             {
                 return Redirect("/Home/Index");
             }
             else
             {
-                return Redirect("/Home/Index/?FilterType=" + FilterType);
+                return Redirect("/Home/Index/?FilterType=" + filterType);
             }
         }
 
-        [HttpGet]
-        public ActionResult AddTask(string TaskName, string DeadlineDate, string DeadlineTime, string HighPriority, string FilterType)
+        [HttpPost]
+        public ActionResult AddTask(string taskName, string deadlineDate, string deadlineTime, string highPriority, string filterType)
         {
-            bool HighTaskPriority = (HighPriority == "True") ? true : false;
-            DateTime Date = Convert.ToDateTime(DeadlineDate);
+            bool HighTaskPriority = (highPriority == "True") ? true : false;
+            DateTime Date = Convert.ToDateTime(deadlineDate);
             using (UserTaskContext db = new UserTaskContext())
             {
-                UserTask task = new UserTask { TaskName = TaskName, TaskDone = false, HighTaskPriority = HighTaskPriority, DeadlineDate = Date, DeadlineTime = DeadlineTime };
+                UserTask task = new UserTask { TaskName = taskName, TaskDone = false, HighTaskPriority = HighTaskPriority, DeadlineDate = Date, DeadlineTime = deadlineTime };
                 db.UserTasks.Add(task);
                 db.SaveChanges();
             }
-            if (FilterType == "")
+            if (filterType == "")
             {
                 return Redirect("/Home/Index");
             }
             else
             {
-                return Redirect("/Home/Index/?FilterType=" + FilterType);
+                return Redirect("/Home/Index/?FilterType=" + filterType);
             }
         }
 
-        [HttpGet]
-        public ActionResult ChangeTask(int TaskId, string TaskName, string DeadlineDate, string DeadlineTime, string HighPriority, string FilterType)
+        [HttpPost]
+        public ActionResult ChangeTask(int taskId, string taskName, string deadlineDate, string deadlineTime, string highPriority, string filterType)
         {
-            bool HighTaskPriority = (HighPriority == "True") ? true : false;
-            DateTime Date = Convert.ToDateTime(DeadlineDate);
+            bool HighTaskPriority = (highPriority == "True") ? true : false;
+            DateTime Date = Convert.ToDateTime(deadlineDate);
 
             using (UserTaskContext db = new UserTaskContext())
             {
-                UserTask task = db.UserTasks.Where(c => c.Id == TaskId).FirstOrDefault();
-                task.TaskName = TaskName;
+                UserTask task = db.UserTasks.Where(c => c.Id == taskId).FirstOrDefault();
+                task.TaskName = taskName;
                 task.HighTaskPriority = HighTaskPriority;
                 task.DeadlineDate = Date;
-                task.DeadlineTime = DeadlineTime;
+                task.DeadlineTime = deadlineTime;
                 db.SaveChanges();
             }
-            if (FilterType == "")
+            if (filterType == "")
             {
                 return Redirect("/Home/Index");
             }
             else
             {
-                return Redirect("/Home/Index/?FilterType=" + FilterType);
+                return Redirect("/Home/Index/?FilterType=" + filterType);
             }
 
         }
 
         [HttpGet]
-        public JsonResult GetTaskInfo(int Id)
+        public JsonResult GetTaskInfo(int id)
         {
             UserTaskContext db = new UserTaskContext();
-            UserTask task = db.UserTasks.Where(c => c.Id == Id).FirstOrDefault();
+            UserTask task = db.UserTasks.Where(c => c.Id == id).FirstOrDefault();
             return Json(task, JsonRequestBehavior.AllowGet);
         }
     }

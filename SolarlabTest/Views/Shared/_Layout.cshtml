@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model SolarlabTest.Models.TasksViewModel
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -35,28 +37,28 @@
                             <a href="/Home/Index">
                                 <span class="left-menu-list-item-icon">&#128221;</span>
                                 <span>Входящие</span>
-                                <span class="task-number">(@ViewBag.DoneInboxTasksNumber/@ViewBag.InboxTasksNumber)</span>
+                                <span class="task-number">(@Model.DoneInboxTasksNumber/@Model.InboxTasksNumber)</span>
                             </a>
                         </li>
                         <li class="left-menu-list-item">
                             <a href="/Home/Index/?FilterType=Today">
                                 <span class="left-menu-list-item-icon">&#128198;</span>
                                 <span>Сегодня</span>
-                                <span class="task-number">(@ViewBag.DoneTodayTasksNumber/@ViewBag.TodayTasksNumber)</span>
+                                <span class="task-number">(@Model.DoneTodayTasksNumber/@Model.TodayTasksNumber)</span>
                             </a>
                         </li>
                         <li class="left-menu-list-item">
                             <a href="/Home/Index/?FilterType=Week">
                                 <span class="left-menu-list-item-icon">&#128197;</span>
                                 <span>Следующие 7 дней</span>
-                                <span class="task-number">(@ViewBag.DoneWeekTasksNumber/@ViewBag.WeekTasksNumber)</span>
+                                <span class="task-number">(@Model.DoneWeekTasksNumber/@Model.WeekTasksNumber)</span>
                             </a>
                         </li>
                         <li class="left-menu-list-item">
                             <a href="/Home/Index/?FilterType=Archive">
                                 <span class="left-menu-list-item-icon">&#128193;</span>
                                 <span>Архив</span>
-                                <span class="task-number">(@ViewBag.DoneArchiveTasksNumber/@ViewBag.ArchiveTasksNumber)</span>
+                                <span class="task-number">(@Model.DoneArchiveTasksNumber/@Model.ArchiveTasksNumber)</span>
                             </a>
                         </li>
                     </ul>
